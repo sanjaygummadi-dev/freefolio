@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -29,7 +29,6 @@ import {
   Heart,
   Users,
   Star,
-  Zap,
 } from "lucide-react";
 
 import project1 from "@/assets/project-ember.jpg";
@@ -354,151 +353,56 @@ function Nav() {
   );
 }
 
-function Card3DTilt({
-  children,
-  className = "",
-  tiltAmount = 12,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  tiltAmount?: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const mouseXSpring = useSpring(x, { stiffness: 280, damping: 22 });
-  const mouseYSpring = useSpring(y, { stiffness: 280, damping: 22 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], [tiltAmount, -tiltAmount]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], [-tiltAmount, tiltAmount]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const xPct = (e.clientX - rect.left) / rect.width - 0.5;
-    const yPct = (e.clientY - rect.top) / rect.height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  return (
-    <div style={{ perspective: "1200px" }} className={className}>
-      <motion.div
-        ref={ref}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
-        }}
-        className="relative transition-transform duration-150 ease-out h-full w-full"
-      >
-        {children}
-      </motion.div>
-    </div>
-  );
-}
-
-function FloatingParticles() {
-  const particles = [
-    { top: "12%", left: "12%", size: "w-3 h-3", delay: 0, duration: 7 },
-    { top: "22%", left: "82%", size: "w-4 h-4", delay: 1, duration: 9 },
-    { top: "65%", left: "8%", size: "w-2.5 h-2.5", delay: 2, duration: 6 },
-    { top: "78%", left: "88%", size: "w-3.5 h-3.5", delay: 0.5, duration: 8 },
-    { top: "42%", left: "93%", size: "w-2 h-2", delay: 1.5, duration: 7.5 },
-    { top: "16%", left: "46%", size: "w-3 h-3", delay: 2.5, duration: 10 },
-  ];
-
-  return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
-      {particles.map((p, i) => (
-        <motion.div
-          key={i}
-          className={`absolute ${p.size} rounded-full bg-primary/25 dark:bg-primary/40 blur-[1px]`}
-          style={{ top: p.top, left: p.left }}
-          animate={{
-            y: [0, -35, 0],
-            x: [0, i % 2 === 0 ? 15 : -15, 0],
-            opacity: [0.3, 0.8, 0.3],
-            scale: [1, 1.3, 1],
-          }}
-          transition={{
-            duration: p.duration,
-            delay: p.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
+  const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.3]);
 
   return (
     <section id="top" ref={ref} className="relative pt-32 pb-24 md:pt-44 md:pb-32 overflow-hidden">
-      <FloatingParticles />
-
-      {/* Dynamic ambient gradient wave */}
       <motion.div
         aria-hidden
-        className="absolute inset-0 -z-10 opacity-50 dark:opacity-30 pointer-events-none"
+        className="absolute inset-0 -z-10 dark:opacity-25"
         animate={{
           background: [
-            "radial-gradient(70% 60% at 50% 0%, oklch(0.96 0.03 254) 0%, transparent 70%)",
-            "radial-gradient(70% 60% at 35% 20%, oklch(0.95 0.04 280) 0%, transparent 70%)",
-            "radial-gradient(70% 60% at 65% 10%, oklch(0.96 0.03 210) 0%, transparent 70%)",
-            "radial-gradient(70% 60% at 50% 0%, oklch(0.96 0.03 254) 0%, transparent 70%)",
+            "radial-gradient(60% 50% at 50% 0%, oklch(0.96 0.02 254) 0%, transparent 70%)",
+            "radial-gradient(60% 50% at 50% 10%, oklch(0.97 0.015 280) 0%, transparent 70%)",
+            "radial-gradient(60% 50% at 50% 0%, oklch(0.96 0.02 254) 0%, transparent 70%)",
           ],
         }}
-        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
       />
 
       <div className="mx-auto max-w-6xl px-6 lg:px-10 text-center">
-        <motion.div
+        <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium uppercase tracking-wider text-primary mb-6"
+          className="text-sm tracking-wide uppercase text-muted-foreground"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-          </span>
-          Available for New Projects
-        </motion.div>
+          Premium Freelance Services
+        </motion.p>
 
         <motion.h1
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.05 }}
-          className="mt-2 text-5xl sm:text-6xl md:text-7xl lg:text-[88px] leading-[1.02] font-semibold tracking-tight text-balance"
+          className="mt-6 text-5xl sm:text-6xl md:text-7xl lg:text-[88px] leading-[1.02] font-semibold tracking-tight text-balance"
         >
           Helping businesses build
           <br className="hidden sm:block" />
-          <span className="bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
-            {" "}beautiful digital experiences.
-          </span>
+          <span className="text-muted-foreground"> beautiful digital experiences.</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.25 }}
-          className="mt-7 max-w-xl mx-auto text-lg text-muted-foreground leading-relaxed"
+          className="mt-7 max-w-xl mx-auto text-lg text-muted-foreground"
         >
           Freelance web designer and developer building premium business websites and
           landing pages in React — designed for your brand, fast on every device and
@@ -509,17 +413,17 @@ function Hero() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-10 flex items-center justify-center gap-4"
+          className="mt-10 flex items-center justify-center gap-3"
         >
           <a
             href="#contact"
-            className="group relative inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground px-7 py-4 text-[15px] font-medium shadow-lg hover:shadow-accent/25 transition-all duration-300 hover:scale-105"
+            className="inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground px-6 py-3.5 text-[15px] font-medium hover:opacity-90 transition-opacity"
           >
-            Start Project <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            Start Project <ArrowRight className="w-4 h-4" />
           </a>
           <a
             href="#projects"
-            className="inline-flex items-center gap-2 rounded-full bg-muted text-foreground px-7 py-4 text-[15px] font-medium hover:bg-border transition-all duration-300 hover:scale-105"
+            className="inline-flex items-center gap-2 rounded-full bg-muted text-foreground px-6 py-3.5 text-[15px] font-medium hover:bg-border transition-colors"
           >
             View Projects
           </a>
@@ -550,129 +454,118 @@ function HeroVisual() {
       transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className="mt-20 md:mt-28 relative"
     >
-      <Card3DTilt tiltAmount={10} className="mx-auto max-w-4xl">
-        <div className="relative aspect-[16/10] md:aspect-[16/9] rounded-[2.5rem] overflow-hidden bg-muted/40 backdrop-blur-xl border border-border/80 shadow-[0_20px_50px_rgba(0,0,0,0.12)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] group">
-          {/* Ambient inner glow */}
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] bg-[radial-gradient(circle_at_center,var(--primary)_0%,transparent_65%)] opacity-[0.10] dark:opacity-[0.16]" />
-            <div className="absolute top-1/3 right-1/4 w-1/2 h-1/2 bg-[radial-gradient(circle_at_center,oklch(0.65_0.17_145)_0%,transparent_60%)] opacity-[0.08] dark:opacity-[0.14]" />
-          </div>
-
-          {/* Grid background pattern */}
-          <svg className="absolute inset-0 w-full h-full opacity-[0.06] dark:opacity-[0.08]" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="hero-grid-3d" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="0.5" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#hero-grid-3d)" />
-          </svg>
-
-          {/* Floating animated 3D core badge */}
-          <div
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
-            style={{ transform: "translateZ(30px)" }}
-          >
-            <div className="relative w-44 h-44 md:w-56 md:h-56">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 rounded-full border border-dashed border-primary/40 opacity-75"
-              />
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-4 rounded-full border border-border/80 opacity-60"
-              />
-              <div className="absolute inset-8 rounded-full bg-primary/15 blur-2xl animate-pulse" />
-              
-              <div className="absolute inset-8 rounded-full bg-background/90 backdrop-blur-2xl border border-border/80 shadow-2xl flex flex-col items-center justify-center">
-                <Shield className="w-10 h-10 md:w-12 md:h-12 text-primary drop-shadow-md" strokeWidth={1.5} />
-                <span className="mt-1.5 text-[10px] md:text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Verified Craft
-                </span>
-              </div>
-
-              {/* Orbiting dots */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-[-14px]"
-              >
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-primary shadow-[0_0_10px_var(--primary)]" />
-              </motion.div>
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-[-28px]"
-              >
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Floating Z-Layer Trust Card */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            style={{ transform: "translateZ(50px)" }}
-            className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 w-44 md:w-56 p-4 md:p-5 rounded-2xl bg-background/85 backdrop-blur-2xl border border-border/70 shadow-xl group-hover:shadow-2xl transition-shadow"
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-7 h-7 rounded-full bg-emerald-500/15 flex items-center justify-center">
-                <Check className="w-4 h-4 text-emerald-500" />
-              </div>
-              <span className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-muted-foreground">Trust score</span>
-            </div>
-            <div className="text-2xl md:text-3xl font-bold tracking-tight">100%</div>
-            <div className="text-xs md:text-sm text-muted-foreground mt-0.5">Satisfaction guaranteed</div>
-            <div className="mt-3 flex items-center gap-1">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Floating Z-Layer Performance Card */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            style={{ transform: "translateZ(50px)" }}
-            className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 w-44 md:w-56 p-4 md:p-5 rounded-2xl bg-background/85 backdrop-blur-2xl border border-border/70 shadow-xl group-hover:shadow-2xl transition-shadow"
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-7 h-7 rounded-full bg-primary/15 flex items-center justify-center">
-                <Zap className="w-4 h-4 text-primary" />
-              </div>
-              <span className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-muted-foreground">Performance</span>
-            </div>
-            <div className="text-2xl md:text-3xl font-bold tracking-tight">100 / 100</div>
-            <div className="text-xs md:text-sm text-muted-foreground mt-0.5">Lighthouse Score</div>
-            <div className="mt-3 h-2 w-full bg-muted rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 1.5, delay: 1.2 }}
-                className="h-full bg-gradient-to-r from-primary to-emerald-500 rounded-full"
-              />
-            </div>
-          </motion.div>
-
-          {/* Floating Z-Layer Bottom Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
-            style={{ transform: "translateZ(40px)" }}
-            className="absolute bottom-4 md:bottom-7 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full bg-background/90 backdrop-blur-2xl border border-border/80 shadow-lg flex items-center gap-2.5"
-          >
-            <Sparkles className="w-4 h-4 text-primary animate-spin" style={{ animationDuration: "8s" }} />
-            <span className="text-xs md:text-sm font-medium text-foreground/90">React • TypeScript • Tailwind CSS</span>
-          </motion.div>
+      <div className="relative mx-auto max-w-4xl aspect-[16/10] md:aspect-[16/9] rounded-[2.5rem] overflow-hidden bg-muted/50 border border-border shadow-[var(--shadow-elevated)]">
+        {/* Ambient glow */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,var(--primary)_0%,transparent_60%)] opacity-[0.08] dark:opacity-[0.12]" />
+          <div className="absolute top-1/3 right-1/4 w-1/3 h-1/3 bg-[radial-gradient(circle_at_center,oklch(0.65_0.17_145)_0%,transparent_60%)] opacity-[0.06] dark:opacity-[0.10]" />
         </div>
-      </Card3DTilt>
+
+        {/* Grid lines */}
+        <svg className="absolute inset-0 w-full h-full opacity-[0.04] dark:opacity-[0.06]" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="hero-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hero-grid)" />
+        </svg>
+
+        {/* Central trust core */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative w-40 h-40 md:w-52 md:h-52">
+            {/* Outer rings */}
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-0 rounded-full border border-dashed border-border opacity-60"
+            />
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-4 rounded-full border border-border opacity-40"
+            />
+            {/* Glow */}
+            <div className="absolute inset-8 rounded-full bg-primary/10 blur-xl" />
+            {/* Core badge */}
+            <div className="absolute inset-8 rounded-full bg-background/80 backdrop-blur-xl border border-border shadow-[var(--shadow-soft)] flex items-center justify-center">
+              <Shield className="w-10 h-10 md:w-14 md:h-14 text-primary" strokeWidth={1.5} />
+            </div>
+            {/* Orbiting dots */}
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-[-12px]"
+            >
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-primary" />
+            </motion.div>
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-[-24px]"
+            >
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-success" />
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Floating trust card */}
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 w-40 md:w-52 p-4 md:p-5 rounded-2xl bg-background/80 backdrop-blur-xl border border-border shadow-[var(--shadow-soft)]"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-7 h-7 rounded-full bg-success/15 flex items-center justify-center">
+              <Check className="w-3.5 h-3.5 text-success" />
+            </div>
+            <span className="text-[10px] md:text-xs font-medium uppercase tracking-wider text-muted-foreground">Trust</span>
+          </div>
+          <div className="text-2xl md:text-3xl font-semibold tracking-tight">10+</div>
+          <div className="text-xs md:text-sm text-muted-foreground">Happy clients</div>
+          <div className="mt-3 flex items-center gap-1">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Star key={i} className="w-3 h-3 fill-primary text-primary" />
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Floating loyalty card */}
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 1 }}
+          className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 w-44 md:w-56 p-4 md:p-5 rounded-2xl bg-background/80 backdrop-blur-xl border border-border shadow-[var(--shadow-soft)]"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-7 h-7 rounded-full bg-primary/15 flex items-center justify-center">
+              <Heart className="w-3.5 h-3.5 text-primary" />
+            </div>
+            <span className="text-[10px] md:text-xs font-medium uppercase tracking-wider text-muted-foreground">Loyalty</span>
+          </div>
+          <div className="text-2xl md:text-3xl font-semibold tracking-tight">100%</div>
+          <div className="text-xs md:text-sm text-muted-foreground">Projects delivered</div>
+          <div className="mt-3 h-1.5 w-full bg-muted rounded-full overflow-hidden">
+            <div className="h-full w-full bg-primary rounded-full" />
+          </div>
+        </motion.div>
+
+        {/* Bottom people card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
+          className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 px-4 py-2.5 rounded-full bg-background/90 backdrop-blur-xl border border-border shadow-[var(--shadow-soft)] flex items-center gap-2"
+        >
+          <div className="flex -space-x-2">
+            <div className="w-6 h-6 rounded-full bg-muted border border-background flex items-center justify-center">
+              <Users className="w-3 h-3 text-muted-foreground" />
+            </div>
+          </div>
+          <span className="text-xs md:text-sm text-muted-foreground">Built for long-term partnerships</span>
+        </motion.div>
+      </div>
     </motion.div>
   );
 }
@@ -737,58 +630,54 @@ function Projects() {
           />
         </Reveal>
 
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {PROJECTS.map((p, i) => (
             <Reveal key={i} delay={i * 0.08}>
-              <Card3DTilt tiltAmount={8} className="h-full">
-                <a
-                  href={p.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group flex flex-col h-full rounded-[2.2rem] bg-muted/50 hover:bg-muted/80 border border-border/70 hover:border-primary/40 overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5"
-                >
-                  <div className="aspect-[16/10] overflow-hidden bg-surface relative">
-                    <img
-                      src={p.image}
-                      alt={p.title}
-                      loading="lazy"
-                      width={1400}
-                      height={1000}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noreferrer"
+                className="group block rounded-3xl bg-muted overflow-hidden transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-elevated)]"
+              >
+                <div className="aspect-[4/3] overflow-hidden bg-surface">
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    loading="lazy"
+                    width={1400}
+                    height={1000}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-7 md:p-9 flex flex-col justify-between flex-1">
+                  <div>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {p.client}
+                    </span>
+                    <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+                      {p.title}
+                    </h3>
+                    <p className="mt-3 text-muted-foreground leading-relaxed">{p.description}</p>
                   </div>
 
-                  <div className="p-7 md:p-9 flex flex-col justify-between flex-1">
-                    <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-primary">
-                        {p.client}
-                      </span>
-                      <h3 className="mt-2 text-2xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
-                        {p.title}
-                      </h3>
-                      <p className="mt-3 text-muted-foreground text-sm leading-relaxed">{p.description}</p>
+                  <div className="mt-6 pt-5 border-t border-border/40 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-wrap gap-1.5">
+                      {p.tech.map((t, idx) => (
+                        <span
+                          key={idx}
+                          className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-background text-foreground/80 border border-border/60"
+                        >
+                          {t}
+                        </span>
+                      ))}
                     </div>
-
-                    <div className="mt-6 pt-5 border-t border-border/50 flex flex-wrap items-center justify-between gap-3">
-                      <div className="flex flex-wrap gap-1.5">
-                        {p.tech.map((t, idx) => (
-                          <span
-                            key={idx}
-                            className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-background text-foreground/80 border border-border/60 shadow-sm"
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                      <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary group-hover:translate-x-1 transition-transform">
-                        Visit Website
-                        <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                      </span>
-                    </div>
+                    <span className="inline-flex items-center gap-1 text-sm font-medium relative text-primary">
+                      Visit Website
+                      <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </span>
                   </div>
-                </a>
-              </Card3DTilt>
+                </div>
+              </a>
             </Reveal>
           ))}
         </div>
