@@ -31,10 +31,10 @@ import {
   Star,
 } from "lucide-react";
 
-import project1 from "@/assets/project-1.jpg";
-import project2 from "@/assets/project-2.jpg";
-import project3 from "@/assets/project-3.jpg";
-import project4 from "@/assets/project-4.jpg";
+import project1 from "@/assets/project-ember.jpg";
+import project2 from "@/assets/project-smilecare.jpg";
+import project3 from "@/assets/project-ironforge.jpg";
+import project4 from "@/assets/project-lumiere.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -58,10 +58,42 @@ const NAV_LINKS = [
 ];
 
 const PROJECTS = [
-  { image: project1, client: "[CLIENT NAME]", title: "[PROJECT TITLE]", description: "[PROJECT DESCRIPTION]", url: "[PROJECT URL]" },
-  { image: project2, client: "[CLIENT NAME]", title: "[PROJECT TITLE]", description: "[PROJECT DESCRIPTION]", url: "[PROJECT URL]" },
-  { image: project3, client: "[CLIENT NAME]", title: "[PROJECT TITLE]", description: "[PROJECT DESCRIPTION]", url: "[PROJECT URL]" },
-  { image: project4, client: "[CLIENT NAME]", title: "[PROJECT TITLE]", description: "[PROJECT DESCRIPTION]", url: "[PROJECT URL]" },
+  {
+    image: project1,
+    client: "Premium Restaurant",
+    title: "EMBER & SPICE",
+    description:
+      "A premium restaurant website designed to showcase the dining experience, signature menu, gallery, and location while providing a seamless table reservation journey.",
+    tech: ["React", "TypeScript", "Tailwind CSS"],
+    url: "https://sanjaygummadi-dev.github.io/Restaurent_proj/",
+  },
+  {
+    image: project2,
+    client: "Dental Clinic",
+    title: "SMILECARE",
+    description:
+      "A modern dental clinic website focused on building patient trust through clear service information, doctor profiles, testimonials, and a streamlined appointment booking experience.",
+    tech: ["React", "TypeScript", "Tailwind CSS"],
+    url: "https://sanjaygummadi-dev.github.io/dental-proj/",
+  },
+  {
+    image: project3,
+    client: "Fitness Studio",
+    title: "IRONFORGE ATHLETICS",
+    description:
+      "A high-energy fitness website designed to showcase training programs, expert trainers, membership plans, class schedules, and trial-session booking.",
+    tech: ["React", "TypeScript", "Tailwind CSS"],
+    url: "https://sanjaygummadi-dev.github.io/Gym-proj/",
+  },
+  {
+    image: project4,
+    client: "Salon & Spa",
+    title: "LUMIÈRE STUDIO & SPA",
+    description:
+      "An elegant salon and spa website combining premium visual design with service discovery, bridal packages, gallery experiences, and a streamlined appointment booking flow.",
+    tech: ["React", "TypeScript", "Tailwind CSS"],
+    url: "https://sanjaygummadi-dev.github.io/salon_proj/",
+  },
 ];
 
 const SERVICES = [
@@ -177,9 +209,9 @@ const WHATSAPP_NUMBER = "917989195795";
 const WHATSAPP_MESSAGE = "Hi Sanjay, I'd like to start a project.";
 
 const SOCIALS = {
-  linkedin: "https://www.linkedin.com/in/sanjay-gummadi",
+  linkedin: "https://www.linkedin.com/in/sanjaygummadi-dev/",
   instagram: "https://www.instagram.com/sanjay_gummadi",
-  github: "https://github.com/sanjaygummadi",
+  github: "https://github.com/sanjaygummadi-dev",
 };
 
 function whatsappLink(message: string) {
@@ -617,18 +649,33 @@ function Projects() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                <div className="p-7 md:p-9">
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                    {p.client}
-                  </p>
-                  <h3 className="mt-3 text-2xl font-semibold tracking-tight">
-                    {p.title}
-                  </h3>
-                  <p className="mt-3 text-muted-foreground">{p.description}</p>
-                  <span className="mt-6 inline-flex items-center gap-1 text-sm font-medium relative">
-                    Visit Website
-                    <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </span>
+                <div className="p-7 md:p-9 flex flex-col justify-between flex-1">
+                  <div>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {p.client}
+                    </span>
+                    <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+                      {p.title}
+                    </h3>
+                    <p className="mt-3 text-muted-foreground leading-relaxed">{p.description}</p>
+                  </div>
+
+                  <div className="mt-6 pt-5 border-t border-border/40 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-wrap gap-1.5">
+                      {p.tech.map((t, idx) => (
+                        <span
+                          key={idx}
+                          className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-background text-foreground/80 border border-border/60"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="inline-flex items-center gap-1 text-sm font-medium relative text-primary">
+                      Visit Website
+                      <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </span>
+                  </div>
                 </div>
               </a>
             </Reveal>
