@@ -9,6 +9,9 @@ import { defineConfig } from "@Lovable.dev/vite-tanstack-config";
 export default defineConfig({
   vite: {
     base: "/freefolio/",
+    build: {
+      emptyOutDir: false,
+    },
   },
 
   tanstackStart: {
