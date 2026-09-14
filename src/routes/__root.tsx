@@ -10,6 +10,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import faviconPng from "../assets/favicon.png?url";
+import favicon32 from "../assets/favicon-32x32.png?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -77,14 +79,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "[YOUR NAME] — Premium Freelance Services" },
-      { name: "description", content: "Helping businesses build beautiful, performant digital experiences. Premium freelance design and development." },
-      { property: "og:title", content: "[YOUR NAME] — Premium Freelance Services" },
+      { title: "SBG Solutions — Building a Smarter Tomorrow" },
+      { name: "description", content: "Helping businesses build beautiful, performant digital experiences. Ideas | Websites | Apps | Softwares | Growth." },
+      { property: "og:title", content: "SBG Solutions — Building a Smarter Tomorrow" },
       { property: "og:description", content: "Helping businesses build beautiful, performant digital experiences." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
+      { rel: "icon", type: "image/png", sizes: "192x192", href: faviconPng },
+      { rel: "icon", type: "image/png", sizes: "32x32", href: favicon32 },
+      { rel: "shortcut icon", href: favicon32 },
+      { rel: "apple-touch-icon", href: faviconPng },
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },

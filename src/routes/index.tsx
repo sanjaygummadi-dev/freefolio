@@ -35,6 +35,10 @@ import project1 from "@/assets/project-ember.jpg";
 import project2 from "@/assets/project-smilecare.jpg";
 import project3 from "@/assets/project-ironforge.jpg";
 import project4 from "@/assets/project-lumiere.jpg";
+import sbgLogoDark from "@/assets/sbg-logo-transparent-dark.png";
+import sbgLogoLight from "@/assets/sbg-logo-transparent-light.png";
+import heroWatermarkDark from "@/assets/hero-logo-watermark-dark.png";
+import heroWatermarkLight from "@/assets/hero-logo-watermark-light.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -275,8 +279,11 @@ function Nav() {
       }`}
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-10 h-16 flex items-center justify-between">
-        <a href="#top" className="text-lg font-bold tracking-[0.2em] uppercase">
-          S A N J A Y
+        <a href="#top" className="flex items-center gap-3 group focus:outline-none" aria-label="SBG Solutions">
+          <div className="relative flex items-center h-10 w-auto transition-transform duration-300 group-hover:scale-105">
+            <img src={sbgLogoDark} alt="SBG Solutions" className="hidden dark:block h-10 w-auto object-contain drop-shadow-[0_0_12px_rgba(0,162,255,0.4)]" />
+            <img src={sbgLogoLight} alt="SBG Solutions" className="block dark:hidden h-10 w-auto object-contain" />
+          </div>
         </a>
 
         <nav className="hidden md:flex items-center gap-9">
@@ -377,7 +384,9 @@ function Hero() {
         transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      <div className="mx-auto max-w-6xl px-6 lg:px-10 text-center">
+
+
+      <div className="relative z-10 mx-auto max-w-6xl px-6 lg:px-10 text-center">
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
