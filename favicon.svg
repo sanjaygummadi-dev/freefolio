@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="sbg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00D2FF" />
+      <stop offset="50%" stop-color="#0066FF" />
+      <stop offset="100%" stop-color="#0033B5" />
+    </linearGradient>
+    <linearGradient id="cyan-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F0FF" />
+      <stop offset="100%" stop-color="#0088FF" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0066FF" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Dark container background for tab contrast -->
+  <rect width="512" height="512" rx="100" fill="#050914"/>
+
+  <g transform="translate(25, 40)">
+    <!-- SBG Main Graphic Text Contour -->
+    <path d="M 50 150 C 50 90, 140 70, 210 70 L 220 70 C 270 70, 290 100, 270 130 C 250 165, 170 170, 110 190 C 50 210, 40 260, 60 300 C 85 350, 170 360, 230 350 C 260 345, 280 330, 280 330 L 265 285 C 265 285, 240 298, 215 302 C 170 310, 110 300, 100 270 C 92 245, 140 230, 190 215 C 260 195, 330 180, 330 115 C 330 50, 240 20, 160 20 C 70 20, 5 65, 5 150 Z" fill="url(#sbg-grad)" />
+
+    <!-- S Wave Ribbon overlay -->
+    <path d="M 25 150 C 40 100, 110 75, 170 75 C 220 75, 260 90, 240 120 C 225 140, 170 150, 120 165 C 70 180, 30 205, 45 255 C 55 290, 105 315, 170 310" fill="none" stroke="url(#cyan-glow)" stroke-width="18" stroke-linecap="round" />
+
+    <!-- B Shape -->
+    <path d="M 170 70 L 285 70 C 330 70, 360 95, 360 125 C 360 150, 335 170, 305 175 C 345 180, 375 205, 375 245 C 375 295, 330 315, 275 315 L 170 315 Z M 225 115 L 225 150 L 275 150 C 290 150, 305 142, 305 130 C 305 118, 290 115, 275 115 Z M 225 190 L 225 270 L 285 270 C 305 270, 320 258, 320 230 C 320 202, 305 190, 285 190 Z" fill="url(#sbg-grad)" opacity="0.95"/>
+
+    <!-- G Shape & Pixels -->
+    <g transform="translate(140, 0)">
+      <path d="M 230 70 C 170 70, 130 115, 130 190 C 130 265, 170 315, 240 315 C 295 315, 330 280, 330 230 L 240 230 L 240 185 L 375 185 L 375 240 C 375 310, 315 360, 235 360 C 135 360, 75 290, 75 190 C 75 90, 145 20, 245 20 C 300 20, 345 40, 375 75 L 335 115 C 310 90, 280 70, 230 70 Z" fill="url(#sbg-grad)"/>
+
+      <!-- Digital Pixel Squares on G top-right -->
+      <rect x="360" y="30" width="35" height="35" rx="6" fill="#00F0FF" />
+      <rect x="320" y="70" width="30" height="30" rx="5" fill="#00A2FF" />
+      <rect x="360" y="75" width="25" height="25" rx="4" fill="#0055FF" />
+    </g>
+  </g>
+</svg>
